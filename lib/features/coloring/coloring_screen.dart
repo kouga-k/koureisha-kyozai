@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import 'coloring_pdf_service.dart';
+import 'ai_coloring_screen.dart';
 import '../image_coloring/image_coloring_screen.dart';
 
 // 内蔵ぬりえテンプレート（SVGパスで将来実装予定。今はプレースホルダー）
@@ -158,28 +159,57 @@ class _ColoringScreenState extends State<ColoringScreen> {
               ),
             ),
 
-            // 写真・PDFからぬりえを作るボタン
+            // オリジナル作成ボタン群
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.add_photo_alternate, size: 22),
-                label: const Text(
-                  '\u5199\u771f\u30fbPDF\u304b\u3089\u306c\u308a\u3048\u3092\u4f5c\u308b',
-                  style: TextStyle(fontSize: 16),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  minimumSize: const Size(double.infinity, 52),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.auto_awesome, size: 20),
+                      label: const Text(
+                        'AI\u3067\u30aa\u30ea\u30b8\u30ca\u30eb',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal,
+                        minimumSize: const Size(0, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AiColoringScreen(),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const ImageColoringScreen(),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.add_photo_alternate, size: 20),
+                      label: const Text(
+                        '\u5199\u771f\u30fbPDF\u304b\u3089',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurple,
+                        minimumSize: const Size(0, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ImageColoringScreen(),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
             const SizedBox(height: 8),
@@ -249,19 +279,19 @@ class _ColoringScreenState extends State<ColoringScreen> {
               ),
             ),
 
-            // 開発中のお知らせ
+            // 案内
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(12),
-              color: Colors.amber[50],
+              color: Colors.teal.shade50,
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.construction, size: 16, color: Colors.amber),
+                  Icon(Icons.auto_awesome, size: 16, color: Colors.teal),
                   SizedBox(width: 6),
                   Text(
-                    'ぬりえの線画データは順次追加予定です',
-                    style: TextStyle(fontSize: 13, color: Colors.amber),
+                    '\u30c6\u30f3\u30d7\u30ec\u30fc\u30c8\u3092\u30bf\u30c3\u30d7\u2192AI\u304c\u304d\u308c\u3044\u306a\u8f2a\u90ed\u7dda\u3092\u751f\u6210\u3057\u307e\u3059',
+                    style: TextStyle(fontSize: 13, color: Colors.teal),
                   ),
                 ],
               ),
@@ -283,35 +313,56 @@ class _ColoringScreenState extends State<ColoringScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(template['icon'], style: const TextStyle(fontSize: 64)),
+            Text(template['icon'], style: const TextStyle(fontSize: 56)),
             const SizedBox(height: 8),
             Text(
               template['name'],
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             Text(
-              '季節: ${template['season']}　難易度: ${template['difficulty']}',
+              '\u5b63\u7bc0: ${template['season']}\u3000\u96e3\u6613\u5ea6: ${template['difficulty']}',
               style: const TextStyle(color: AppColors.textSecondary),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'このぬりえのPDFを作成します。\nA4で印刷してご使用ください。',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15),
-            ),
-            const SizedBox(height: 20),
+            // AI生成（推奨）
             ElevatedButton.icon(
-              icon: const Icon(Icons.picture_as_pdf),
-              label: const Text('PDF保存・印刷する'),
+              icon: const Icon(Icons.auto_awesome, size: 22),
+              label: const Text(
+                'AI\u3067\u304d\u308c\u3044\u306a\u306c\u308a\u3048\u3092\u4f5c\u308b\uff08\u304a\u3059\u3059\u3081\uff09',
+                style: TextStyle(fontSize: 16),
+              ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.coloringColor,
-                minimumSize: const Size(double.infinity, 56),
+                backgroundColor: Colors.teal,
+                minimumSize: const Size(double.infinity, 58),
+              ),
+              onPressed: () {
+                Navigator.pop(ctx);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AiColoringScreen(
+                      initialTheme: template['name'] as String,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            // 従来のPDF（APIキーなしでも使用可）
+            OutlinedButton.icon(
+              icon: const Icon(Icons.picture_as_pdf, size: 18),
+              label: const Text(
+                '\u30b7\u30f3\u30d7\u30ebPDF\uff08API\u30ad\u30fc\u4e0d\u8981\uff09',
+                style: TextStyle(fontSize: 14),
+              ),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 46),
               ),
               onPressed: () async {
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('${template['name']}のぬりえを作成中...'),
+                    content: Text('${template['name']}\u306e\u306c\u308a\u3048\u3092\u4f5c\u6210\u4e2d...'),
                     backgroundColor: AppColors.coloringColor,
                     duration: const Duration(seconds: 2),
                   ),
@@ -326,7 +377,7 @@ class _ColoringScreenState extends State<ColoringScreen> {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('エラーが発生しました: $e'),
+                        content: Text('\u30a8\u30e9\u30fc\u304c\u767a\u751f\u3057\u307e\u3057\u305f: $e'),
                         backgroundColor: Colors.red,
                       ),
                     );
