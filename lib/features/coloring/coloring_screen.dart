@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
+import 'coloring_pdf_service.dart';
 
 // 内蔵ぬりえテンプレート（SVGパスで将来実装予定。今はプレースホルダー）
 const List<Map<String, dynamic>> _templates = [
@@ -256,14 +257,31 @@ class _ColoringScreenState extends State<ColoringScreen> {
                 backgroundColor: AppColors.coloringColor,
                 minimumSize: const Size(double.infinity, 56),
               ),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('${template['name']}のぬりえを準備中...'),
+                    content: Text('${template['name']}のぬりえを作成中...'),
                     backgroundColor: AppColors.coloringColor,
+                    duration: const Duration(seconds: 2),
                   ),
                 );
+                try {
+                  await ColoringPdfService.generateColoringPdf(
+                    name: template['name'] as String,
+                    season: template['season'] as String,
+                    difficulty: template['difficulty'] as String,
+                  );
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('エラーが発生しました: $e'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
               },
             ),
           ],
