@@ -4,18 +4,41 @@ import 'coloring_pdf_service.dart';
 
 // 内蔵ぬりえテンプレート（SVGパスで将来実装予定。今はプレースホルダー）
 const List<Map<String, dynamic>> _templates = [
+  // 春
   {'name': '桜', 'season': '春', 'icon': '🌸', 'difficulty': 'やさしい'},
   {'name': 'チューリップ', 'season': '春', 'icon': '🌷', 'difficulty': 'やさしい'},
+  {'name': 'カーネーション', 'season': '春', 'icon': '💐', 'difficulty': 'ふつう'},
+  {'name': 'こいのぼり', 'season': '春', 'icon': '🎏', 'difficulty': 'やさしい'},
+  {'name': 'ひな人形', 'season': '春', 'icon': '🎎', 'difficulty': 'ふつう'},
+  {'name': '蝶々', 'season': '春', 'icon': '🦋', 'difficulty': 'むずかしい'},
+  // 夏
   {'name': 'ひまわり', 'season': '夏', 'icon': '🌻', 'difficulty': 'ふつう'},
   {'name': '朝顔', 'season': '夏', 'icon': '🌺', 'difficulty': 'ふつう'},
+  {'name': '金魚', 'season': '夏', 'icon': '🐟', 'difficulty': 'やさしい'},
+  {'name': 'スイカ', 'season': '夏', 'icon': '🍉', 'difficulty': 'やさしい'},
+  {'name': '風鈴', 'season': '夏', 'icon': '🎐', 'difficulty': 'やさしい'},
+  {'name': '花火', 'season': '夏', 'icon': '🎆', 'difficulty': 'ふつう'},
+  {'name': 'かき氷', 'season': '夏', 'icon': '🍧', 'difficulty': 'やさしい'},
+  // 秋
   {'name': 'もみじ', 'season': '秋', 'icon': '🍁', 'difficulty': 'ふつう'},
   {'name': 'どんぐり', 'season': '秋', 'icon': '🌰', 'difficulty': 'やさしい'},
+  {'name': 'お月見', 'season': '秋', 'icon': '🌕', 'difficulty': 'ふつう'},
+  {'name': '菊の花', 'season': '秋', 'icon': '🌼', 'difficulty': 'むずかしい'},
+  {'name': 'トンボ', 'season': '秋', 'icon': '🪲', 'difficulty': 'ふつう'},
+  // 冬
   {'name': '雪だるま', 'season': '冬', 'icon': '⛄', 'difficulty': 'やさしい'},
+  {'name': '椿', 'season': '冬', 'icon': '🌺', 'difficulty': 'ふつう'},
+  {'name': '門松', 'season': '冬', 'icon': '🎍', 'difficulty': 'ふつう'},
+  {'name': '節分の鬼', 'season': '冬', 'icon': '👹', 'difficulty': 'ふつう'},
+  {'name': 'みかん', 'season': '冬', 'icon': '🍊', 'difficulty': 'やさしい'},
+  // 通年
   {'name': '富士山', 'season': '通年', 'icon': '🗻', 'difficulty': 'ふつう'},
-  {'name': '金魚', 'season': '夏', 'icon': '🐟', 'difficulty': 'やさしい'},
   {'name': 'うさぎ', 'season': '通年', 'icon': '🐇', 'difficulty': 'やさしい'},
   {'name': '猫', 'season': '通年', 'icon': '🐱', 'difficulty': 'ふつう'},
-  {'name': '蝶々', 'season': '春', 'icon': '🦋', 'difficulty': 'むずかしい'},
+  {'name': 'だるま', 'season': '通年', 'icon': '🎯', 'difficulty': 'やさしい'},
+  {'name': '折り鶴', 'season': '通年', 'icon': '🕊️', 'difficulty': 'むずかしい'},
+  {'name': '桃の花', 'season': '春', 'icon': '🌸', 'difficulty': 'やさしい'},
+  {'name': 'ひし餅', 'season': '春', 'icon': '🍡', 'difficulty': 'やさしい'},
 ];
 
 class ColoringScreen extends StatefulWidget {
