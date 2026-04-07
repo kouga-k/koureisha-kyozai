@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/services/api_key_service.dart';
-import '../../core/services/gemini_service.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -42,34 +41,31 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       return;
     }
 
+    // 簡易フォーマットチェック（AIzaで始まるか）
+    if (!apiKey.startsWith('AIza') || apiKey.length < 30) {
+      setState(() {
+        _statusMessage = 'APIキーの形式が正しくありません。\nGoogle AI StudioのAPIキーを確認してください。';
+        _statusIsError = true;
+      });
+      return;
+    }
+
     setState(() {
       _isLoading = true;
-      _statusMessage = 'APIキーを確認中...';
+      _statusMessage = '保存中...';
       _statusIsError = false;
     });
 
-    // 接続テスト
     final service = ref.read(apiKeyServiceProvider);
-    final gemini = GeminiService(service);
-    final ok = await gemini.testConnection(apiKey);
+    await service.saveGeminiApiKey(apiKey);
+    ref.invalidate(hasGeminiApiKeyProvider);
 
     if (!mounted) return;
-
-    if (ok) {
-      await service.saveGeminiApiKey(apiKey);
-      ref.invalidate(hasGeminiApiKeyProvider);
-      setState(() {
-        _isLoading = false;
-        _statusMessage = '✓ APIキーを保存しました。AI機能が使えます。';
-        _statusIsError = false;
-      });
-    } else {
-      setState(() {
-        _isLoading = false;
-        _statusMessage = 'APIキーが正しくないか、接続できませんでした。\n確認してもう一度お試しください。';
-        _statusIsError = true;
-      });
-    }
+    setState(() {
+      _isLoading = false;
+      _statusMessage = '✓ APIキーを保存しました。AI機能が使えます。';
+      _statusIsError = false;
+    });
   }
 
   Future<void> _deleteKey() async {
