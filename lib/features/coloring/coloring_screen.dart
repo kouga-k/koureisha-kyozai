@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import 'coloring_pdf_service.dart';
+import '../image_coloring/image_coloring_screen.dart';
 
 // 内蔵ぬりえテンプレート（SVGパスで将来実装予定。今はプレースホルダー）
 const List<Map<String, dynamic>> _templates = [
@@ -156,6 +157,32 @@ class _ColoringScreenState extends State<ColoringScreen> {
                 ],
               ),
             ),
+
+            // 写真・PDFからぬりえを作るボタン
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.add_photo_alternate, size: 22),
+                label: const Text(
+                  '\u5199\u771f\u30fbPDF\u304b\u3089\u306c\u308a\u3048\u3092\u4f5c\u308b',
+                  style: TextStyle(fontSize: 16),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  minimumSize: const Size(double.infinity, 52),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ImageColoringScreen(),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
 
             // テンプレート一覧
             Expanded(

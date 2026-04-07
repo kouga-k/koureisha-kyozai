@@ -31,6 +31,9 @@ dependencies:
   share_plus: ^12.0.2
   file_picker: ^8.1.2
 
+  # 画像処理（エッジ検出）
+  image: ^4.2.0
+
   # Gemini API（オプション）
   google_generative_ai: ^0.4.6
 

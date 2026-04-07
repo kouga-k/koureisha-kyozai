@@ -33,6 +33,40 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <!-- PDF.js for PDF-to-image rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (typeof pdfjsLib !== 'undefined') {
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    // PDFの1ページ目をPNG Uint8Arrayとして返す
+    async function renderPdfFirstPage(pdfUint8Array) {
+      if (typeof pdfjsLib === 'undefined') {
+        throw new Error('PDF.js が読み込まれていません');
+      }
+      const loadingTask = pdfjsLib.getDocument({ data: pdfUint8Array });
+      const pdf = await loadingTask.promise;
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 2.0 });
+
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      const context = canvas.getContext('2d');
+
+      await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+      return new Promise(function(resolve, reject) {
+        canvas.toBlob(async function(blob) {
+          if (!blob) { reject(new Error('canvas変換失敗')); return; }
+          const buffer = await blob.arrayBuffer();
+          resolve(new Uint8Array(buffer));
+        }, 'image/png');
+      });
+    }
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
